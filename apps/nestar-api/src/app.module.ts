@@ -15,7 +15,9 @@ import { DatabaseModule } from './database/database.module';
       playground: true,
       uploads: false,
       autoSchemaFile: true, 
-    }), ComponentsModule, DatabaseModule],
+    }), ComponentsModule, // HTTP bog'lanish
+    DatabaseModule //TCP bog'lanish
+  ],
   controllers: [AppController],
   providers: [AppService, AppResolver],
 })
