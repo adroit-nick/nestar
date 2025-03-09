@@ -10,12 +10,14 @@ import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), GraphQLModule.forRoot({
+    ConfigModule.forRoot(), 
+    GraphQLModule.forRoot({
       driver: ApolloDriver,
       playground: true,
       uploads: false,
       autoSchemaFile: true, 
-    }), ComponentsModule, // HTTP bog'lanish
+    }), 
+    ComponentsModule, // HTTP bog'lanish
     DatabaseModule //TCP bog'lanish
   ],
   controllers: [AppController],
