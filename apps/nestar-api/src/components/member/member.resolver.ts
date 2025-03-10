@@ -13,7 +13,6 @@ export class MemberResolver {
     public async signup(@Args('input') input: MemberInput ): Promise<Member> {
         try {
         console.log('Mutation: signup');
-        console.log('input:', input);
         return this.MemberService.signup(input);
         } catch (err) {
             console.log('Error, signup:', err);
