@@ -25,7 +25,7 @@ return result;
 
 public async login(input: LoginInput): Promise<Member> {
     const {memberNick, memberPassword} = input;
-    const response: Member = await this.memberModel
+    const response: Member | null = await this.memberModel
     .findOne({ memberNick: memberNick })
     .select('+memberPassword')
     .exec();
@@ -36,6 +36,9 @@ public async login(input: LoginInput): Promise<Member> {
         throw new InternalServerErrorException(Message.BLOCKED_USER);
     }
 
+    
+
+    
     // TODO Compare password
     console.log('response:', response);
     const isMatch = memberPassword === response.memberPassword;
