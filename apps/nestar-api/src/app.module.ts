@@ -19,13 +19,13 @@ import { T } from './libs/types/common';
       autoSchemaFile: true, 
       formatError: (error: T) => {
         console.log('error:', error);
-        const graphqlFormattedError = {
-          code: error?.extension.code,
+        const graphQLFormattedError = {
+          code: error?.extensions.code,
           message: 
-          error?.extensions?.exception?.response?.message || error?.extensions?.response?.message ||  error?.message ,
+          error?.extensions?.exception?.response?.message || error?.extensions?.response?.message ||  error?.message,
         };
-        console.log('GRAPHQL GLOBAL ERR:', graphqlFormattedError);
-        return graphqlFormattedError;
+        console.log('GRAPHQL GLOBAL ERR:', graphQLFormattedError);
+        return graphQLFormattedError;
       },
     }), 
     ComponentsModule, // HTTP bog'lanish
