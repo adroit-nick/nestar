@@ -49,8 +49,15 @@ public async login(input: LoginInput): Promise<Member> {
 }
 
 public async updateMember(): Promise<string> {
-    return 'signup executed!';}
+    return 'updateMember executed!';}
 
 public async getMember(): Promise<string> {
     return 'signup executed!';}
+
+
+public async getAllMembersByAdmin(): Promise<string> {
+        return 'getAllMembersByAdmin executed!';}
+    
+public async updateMemberByAdmin(): Promise<string> {
+        return 'updateMemberByAdmin executed!';}
 }
