@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class LoggingInterceptor implements NestInterceptor {
-private readonly logger: Logger = new Logger();
-
+export class LoggingInterceptor implements NestInterceptor { // class+interface => implements
+private readonly logger: Logger = new Logger();              // class+class=extends
+                                                            // interface+interface= extends
   public intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
    const recordTime = Date.now(); 
    const requestType = context.getType<GqlContextType>();
