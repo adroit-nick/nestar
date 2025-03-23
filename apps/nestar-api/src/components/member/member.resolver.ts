@@ -10,9 +10,11 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { MemberUpdate } from '../../libs/dto/member/member.update';
 import { Member } from '../../libs/dto/member/member';
 import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
+import { shapeIntoMongoObjectId } from '../../libs/types/config';
 
 @Resolver()
 export class MemberResolver {
+    memberService: any;
     constructor(private readonly MemberService: MemberService) {}
 
     @Mutation(() => Member)
@@ -56,24 +58,25 @@ export class MemberResolver {
         return this.MemberService.updateMember(memberId, input);
     }
     
-    @Query(() => String)
-    public async getMember(): Promise<string> {
+    @Query(() => Member)
+    public async getMember(@Args('memberId') input: string): Promise<Member> {
         console.log('Query: getMember');
-        return this.MemberService.getMember();
+        console
+        const targetId = shapeIntoMongoObjectId(input);
+        return this.MemberService.getMember(targetId);
     }
-
     /** ADMIN **/
     //Authorization: ADMIN
     @Roles(MemberType.ADMIN)
     @UseGuards(RolesGuard)
     @Mutation(() => String)
 public async getAllMembersByAdmin(): Promise<string> {
-    return this.MemberService.getAllMembersByAdmin();
+    return this.memberService.getAllMembersByAdmin();
 }
 
 @Mutation(() => String)
 public async updateMemberByAdmin(): Promise<string> {
     console.log('Mutation: updateMemberByAdmin');
-    return this.MemberService.updateMemberByAdmin();
+    return this.memberService.updateMemberByAdmin();
 }
 }
