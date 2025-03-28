@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { T } from '../../libs/types/common';
 import { JwtService } from '@nestjs/jwt';
-import { shapeIntoMongoObjectId } from '../../libs/types/config';
 import { Member } from '../../libs/dto/member/member';
+import { shapeIntoMongoObjectId } from '../../libs/config';
 
 @Injectable()
 export class AuthService {
