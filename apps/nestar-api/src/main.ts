@@ -1,20 +1,18 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import {  ValidationPipe } from '@nestjs/common';
+import { LoggingInterceptor } from './libs/interceptor/Logging.interceptor';
+import {graphqlUploadExpress} from "graphql-upload";
+import * as express from "express";
 
-import {ObjectId} from 'bson';
 
-export const availableAgentSorts = ["createdAt", "updatedAt", "memberLikes", "memberViews", "memberRank" ];
-
-export const availableMemberSorts = ["createdAt", "updatedAt", "memberLikes", "memberViews" ];
-
- // IMAGE CONFIGURATION (config.js)
- import { v4 as uuidv4 } from 'uuid';
- import * as path from 'path';
-
- export const validMimeTypes = ['image/png', 'image/jpg', 'image/jpeg'];
- export const getSerialForImage = (filename: string) => {
-   const ext = path.parse(filename).ext;
-   return uuidv4() + ext;
- };
-
-export const shapeIntoMongoObjectId = (target: any) => {
- return typeof target === 'string' ? new ObjectId(target): target;
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(new LoggingInterceptor);
+  app.enableCors({origin: true, credentials: true});
+  app.use(graphqlUploadExpress({maxFileSize: 15000000, MaxFiles: 10}));
+  app.use("/uploads", express.static('./uploads'));
+  await app.listen(process.env.PORT_API ?? 3007);
 }
+bootstrap();
