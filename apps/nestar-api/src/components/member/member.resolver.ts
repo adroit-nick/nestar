@@ -9,7 +9,7 @@ import { ObjectId } from 'mongoose';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { MemberType } from '../../libs/enums/member.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { MemberUpdate } from '../../libs/dto/member.update';
+import { MemberUpdate } from '../../libs/dto/member/member.update';
 import { getSerialForImage, shapeIntoMongoObjectId, validMimeTypes } from '../../libs/config';
 import { WithoutGuard } from '../auth/guards/without.guard';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
@@ -42,7 +42,7 @@ export class MemberResolver {
   return `Hi ${memberNick}`;
  }
 
- @Roles(MemberType.USER)
+ @Roles(MemberType.USER,  MemberType.AGENT)
  @UseGuards(RolesGuard)
  @Query(()=> String)
  public async checkAuthRoles(@AuthMember() authMember: Member ): Promise<String>{
@@ -76,6 +76,17 @@ export class MemberResolver {
   return await this.memberService.getAgents(memberId, input);
  }
 
+ @UseGuards(AuthGuard)
+ @Mutation(() => Member)
+ public async likeTargetMember(
+	@Args("memberId") input: string,
+  @AuthMember('_id') memberId: ObjectId,
+ ): Promise <Member>{
+	console.log("Mutation: likeTargetMember");
+	const likeRefId = shapeIntoMongoObjectId(input);
+  return await this.memberService.likeTargetMember(memberId, likeRefId);
+ }
+
 //  Admin
 @Roles(MemberType.ADMIN)
 @UseGuards(RolesGuard)
@@ -87,7 +98,6 @@ public async getAllMembersByAdmin(@Args('input') input: MembersInquiry): Promise
 
 
 @Roles(MemberType.ADMIN)
-@UseGuards(RolesGuard)
 @Mutation(() => Member)
 public async updateMemberByAdmin(@Args('input') input: MemberUpdate): Promise<Member>{
  console.log("Mutation: updateMembeByAdmin");
