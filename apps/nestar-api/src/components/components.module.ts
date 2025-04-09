@@ -9,13 +9,6 @@ import { BoardArticleModule } from './board-article/board-article.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [MemberModule, 
-    PropertyModule, 
-    CommentModule, 
-    LikeModule, 
-    ViewModule, 
-    FollowModule, 
-    BoardArticleModule, 
-    AuthModule]
+  imports: [MemberModule, PropertyModule, CommentModule, LikeModule, ViewModule, FollowModule, BoardArticleModule, AuthModule]
 })
 export class ComponentsModule {}

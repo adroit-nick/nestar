@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { Properties, Property } from '../../libs/dto/property/property';
-import { AgentPropertiesInquiry, AllPropertiesInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
+import { AgentPropertiesInquiry, AllPropertiesInquiry, OrdinaryInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { MemberService } from '../member/member.service';
 import { ViewService } from '../view/view.service';
@@ -11,7 +11,7 @@ import { StatisticModifier, T } from '../../libs/types/common';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import * as moment from 'moment';
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
-import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
+import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 import { LikeService } from '../like/like.service';
 import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
@@ -116,7 +116,7 @@ export class PropertyService {
                       { $skip: (input.page - 1) * input.limit },
                       { $limit: input.limit },
 
-                      // meLiked
+                      lookupAuthMemberLiked(memberId),
 
                       lookupMember,
                       { $unwind: '$memberData' },
@@ -164,6 +164,14 @@ export class PropertyService {
           });
       }
   }
+
+  public async getFavorites(memberId: ObjectId, input: OrdinaryInquiry):Promise<Properties>  {
+  return await this.likeService.getFavoriteProperties(memberId, input);
+  }
+
+  public async getVisited(memberId: ObjectId, input: OrdinaryInquiry):Promise<Properties>  {
+    return await this.viewService.getVisitedProperties(memberId, input);
+    }
 
   public async likeTargetProperty(memberId: ObjectId, likeRefId: ObjectId): Promise<Property> {
     const target: Property = await this.propertyModel.findOne({_id: likeRefId, propertyStatus: PropertyStatus.ACTIVE}).exec();
